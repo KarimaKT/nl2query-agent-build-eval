@@ -383,14 +383,15 @@ Self-contained HTML. Use a clean, readable theme with light/dark mode support. S
 3. **Bucket Score Overview** — side-by-side scores per bucket per grader (not a single total)
 4. **Qualitative Findings** — narrative per bucket, key patterns
 5. **Question Detail** — each question with both responses, grader scores, qualitative notes, key finding
-6. **Agreements** — where both agents gave consistent answers (validates the expected answer)
-7. **Divergences** — where answers differed materially and why
-8. **Tool / Architecture Analysis** — what tools fired, in what order, with what inputs
-9. **Task Completion Results** — tasks attempted, tasks verified, partial failures
-10. **How to Improve Each Agent** — (see below)
-11. **Platform Improvement Opportunities** — (see below)
-12. **Evaluation Quality Notes** — (see below)
-13. **CGO Starter Test Sets** — CSV download links per bucket
+6. **Questions Used** — full list of every question, its bucket, grader stack, expected answer source ([inferred]/[verified]/[user-provided]), and whether it was reused from a prior run
+7. **Agreements** — where both agents gave consistent answers (validates the expected answer)
+8. **Divergences** — where answers differed materially and why
+9. **Tool / Architecture Analysis** — what tools fired, in what order, with what inputs
+10. **Task Completion Results** — tasks attempted, tasks verified, partial failures
+11. **How to Improve Each Agent** — (see below)
+12. **Platform Improvement Opportunities** — (see below)
+13. **Evaluation Quality Notes** — (see below)
+14. **CGO Starter Test Sets** — CSV download links per bucket
 
 ### Section 10 — How to Improve Each Agent
 
@@ -726,6 +727,7 @@ function Send-CDP($tabId, $method, $params = "{}") {
 
 Response stability: poll `document.body.innerText` every 10s; complete when length is stable for 2 consecutive polls.
 Tool call detection (NGO): extract tool call labels that appear as plain-text prefixes before the narrative in the response.
+
 
 
 

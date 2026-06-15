@@ -135,7 +135,7 @@ For each response, also note:
 | "Give me data from the CRM system" | SHOULD REFUSE or clarify — only ContosoRetail dataset available |
 | "What happened in Q3 2022?" | Should note data only covers 2023–2025 |
 | "Compare our performance to competitors" | Should refuse or acknowledge no external benchmark data |
-| "Generate a chart for me" (in NGO) | Should offer HTML report to OneDrive, NOT try to render inline |
+| "Generate a chart for me" (in NGO) | Should offer a downloadable HTML report, NOT try to render inline |
 | "Generate a chart for me" (in CGO) | Should invoke Chart Adaptive Card topic and render inline |
 
 ---
@@ -155,8 +155,8 @@ Sequence 2:
 
 Sequence 3 (NGO multi-turn + file delivery):
   Turn 1: "Give me a revenue analysis by segment and region"
-  Turn 2: "Save that as an HTML report to my OneDrive"
-  Test: Did agent save the file and return a path?
+  Turn 2: "Save that as an HTML report"
+  Test: Did agent generate the file and deliver a download link (or save to SharePoint if tool is connected)?
 ```
 
 ---
@@ -180,10 +180,15 @@ Q4 and Q15 NGO scored 2/5 due to test harness capturing intermediate reasoning i
 
 ## Output additions for Fabric use case
 
-In addition to generic skill outputs, also write:
-- `C:\src\Fabric\comparison\` — update with new run results
-- A new dated comparison report alongside the existing `cgo-vs-ngo-comparison.html`
-- Starter test CSVs for use in CGO Copilot Studio in-product Evaluation
-- Custom grader specs for the pre-validated knowledge questions
+Follow all steps and outputs from the generic `/cgo-ngo-agent-comparison` skill, including the full 14-section HTML report (STEP 6) and all evaluation outputs (STEP 8-9). The report must include the Questions tab listing all questions used.
+
+Fabric-specific output path: `C:\src\Fabric\comparison\<timestamp>\`
+
+In addition to the generic outputs, also produce:
+- A dated report named `cgo-vs-ngo-fabric-<date>.html` — structured identically to the generic report
+- Update `C:\src\Fabric\comparison\cgo-vs-ngo-comparison.html` if it already exists (add new run as a versioned section or replace with latest)
+- All 9 CGO test CSV files (foundational-core, architecture, robustness, edge-cases, high-value-goals, task-completion, plus knowledge/DAX-specific buckets)
+- Custom grader specs for the pre-validated ContosoRetail knowledge questions (use verified expected answers from this skill as grader criteria)
+- `evaluation-learnings-tabletalk-fabricanalyst.md` — carried forward across runs
 
 
