@@ -85,6 +85,16 @@ dataset/
 
 Each skill is a markdown instruction file. Load it into your AI assistant and ask it to perform the task described.
 
+### Install skills locally
+
+Clone or download this repo — the skills are plain markdown files, no install needed:
+
+```bash
+git clone https://github.com/KarimaKT/nl2query-agent-labs
+```
+
+Point your AI assistant at the `skills/` folder, or copy individual skill subfolders wherever your tooling expects them. No build step, no dependencies.
+
 ### Deploy TableTalk (CGO) + ContosoRetail dataset
 
 Load `skills/tabletalk-fabric-deploy/SKILL.md` into your AI assistant.
@@ -113,15 +123,6 @@ Load `skills/cgo-ngo-agent-comparison/SKILL.md` into your AI assistant.
 
 Works with any two Copilot Studio agents (CGO or NGO). Provide agent paths and canvas URLs — the skill explores configs, generates grounded questions, tests, and reports.
 
-### Install skills locally
-
-Clone or download this repo — the skills are plain markdown files, no install needed:
-
-```bash
-git clone https://github.com/KarimaKT/nl2query-agent-labs
-```
-
-Point your AI assistant at the `skills/` folder, or copy individual skill subfolders wherever your tooling expects them. No build step, no dependencies.
 
 ---
 
