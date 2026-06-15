@@ -40,24 +40,24 @@ Two comparison skills:
 
 From the June 2026 run: CGO scored 94/95 (A+), NGO scored 84/95 (B, adjusted ~88/95). Both agents produced numerically identical answers on 7+ questions. Key divergence: marketing channel ROI trend (different DAX approaches to time-series aggregation).
 
-### 4. NL2Query + NGO patterns and skills
+### 4. NL2Query patterns and New Generative Orchestrator reference
 
 **Reference skills** covering everything we learned building and evaluating these agents:
 
-- **`/ngo-nl2query-patterns`** — The definitive NGO reference: YAML format, PAC CLI bugs, Dataverse API workarounds, CDP browser automation, instructions design, skills via Dataverse API, CDX outage pattern, CGO vs NGO comparison table.
+- **`/ngo-nl2query-patterns`** — NL2Query / Power BI / DAX specific patterns: adaptive TOPN, DAX rules for push datasets, Power BI tool descriptions, schema probe. References `/copilot-studio-new-orchestrator` for general patterns.
 - **`/cgo-nl2query-patterns`** — CGO: YAML format, flow wiring, smart refresh, _metadata table pattern, output composition.
-- **`/copilot-studio-new-orchestrator`** — NGO-specific: settings.mcs.yml format, known bugs, /designer/ URL gotcha.
+- **`/copilot-studio-new-orchestrator`** — Comprehensive New Generative Orchestrator reference: YAML format, PAC CLI bugs, Dataverse API, tools (connectors + Workflows), Skills via API, CDP automation, instructions design, file delivery, CGO comparison, platform gaps.
 
-#### NGO Skills — a novel capability
+#### New Generative Orchestrator Skills — a novel capability
 
-There is currently no public documentation or example of programmatically adding Skills to an NGO agent. This repo documents the full pattern:
+There is currently no public documentation or example of programmatically adding Skills to a New Generative Orchestrator agent. This repo documents the full pattern:
 
 1. Skills are stored as `botcomponent` records (componenttype 9, `kind: InlineAgentSkill`) in Dataverse
 2. `pac copilot clone` captures them in `translations/<schemaName>.skill.<name>.mcs.yml`
 3. `pac copilot push/pack` do NOT yet support `translations/` — Dataverse API POST is the only automated write path
 4. Once PAC CLI adds support, skills become first-class YAML files in the agent solution
 
-The `/ngo-nl2query-patterns` and `/fabric-analyst-deploy` skills both contain the complete `Add-AgentSkill` PowerShell function.
+The `/copilot-studio-new-orchestrator` and `/fabric-analyst-deploy` skills both contain the complete `Add-AgentSkill` PowerShell function.
 
 ---
 
@@ -72,8 +72,8 @@ skills/
   cgo-ngo-agent-comparison/SKILL.md  ← compare any two agents
   cgo-ngo-fabric-comparison/SKILL.md ← Fabric-specific comparison (pre-loaded)
   cgo-nl2query-patterns/SKILL.md     ← CGO YAML patterns reference
-  ngo-nl2query-patterns/SKILL.md     ← NGO patterns, bugs, Dataverse API
-  copilot-studio-new-orchestrator/SKILL.md ← NGO format + gotchas
+  ngo-nl2query-patterns/SKILL.md     ← NL2Query/DAX/Power BI patterns (see also: new-orchestrator skill)
+  copilot-studio-new-orchestrator/SKILL.md ← comprehensive New Generative Orchestrator reference
 
 dataset/
   build_contoso_dataset.py           ← generates ContosoRetail push dataset

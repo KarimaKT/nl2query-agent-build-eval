@@ -14,10 +14,10 @@ What do you want to do?
 ├── Deploy a CGO (classic orchestration) NL2Query agent
 │   └── /tabletalk-fabric-deploy
 │
-├── Deploy an NGO (new orchestration) NL2Query agent  
+├── Deploy a New Generative Orchestrator NL2Query agent
 │   └── /fabric-analyst-deploy
 │
-├── Compare two agents (CGO vs NGO, or any two agents)
+├── Compare two agents (classic vs new orchestrator, or any two agents)
 │   ├── Generic (any 2 agents, any data source)
 │   │   └── /cgo-ngo-agent-comparison
 │   └── Fabric-specific (TableTalk vs Fabric Analyst, ContosoRetail dataset)
@@ -26,10 +26,10 @@ What do you want to do?
 ├── Look up CGO YAML patterns, best practices, flow wiring
 │   └── /cgo-nl2query-patterns
 │
-├── Look up NGO YAML patterns, PAC CLI bugs, Dataverse API workarounds
+├── Look up NL2Query patterns (DAX, adaptive TOPN, Power BI tools)
 │   └── /ngo-nl2query-patterns
 │
-└── Understand NGO agent format, settings.mcs.yml, gotchas
+└── Build any New Generative Orchestrator agent (YAML, PAC CLI, Dataverse API, Workflows, Skills, file delivery)
     └── /copilot-studio-new-orchestrator
 ```
 
@@ -104,7 +104,7 @@ What it outputs: comparison HTML report, scored results, CGO test CSVs, LEARNING
 
 Auto-mode vs 2-step mode: auto runs end-to-end; 2-step shows question list + eval criteria for user approval before final tests.
 
-Note: NGO testing uses CDP browser; CGO testing uses DirectLine (no browser needed).
+Note: New Generative Orchestrator testing uses CDP browser; CGO testing uses DirectLine (no browser needed).
 
 ---
 
@@ -132,23 +132,32 @@ Reference skill — no deployment. Covers:
 ---
 
 ### `/ngo-nl2query-patterns`
-**NGO patterns, PAC CLI bugs, Dataverse API workarounds**
+**NL2Query / Power BI / DAX patterns for the New Generative Orchestrator**
 
-Reference skill — no deployment. Covers:
-- CLICopilotRecognizer + cliagent-1.0.0 YAML format
-- All known PAC CLI bugs and safe workarounds
-- Dataverse API PATCH pattern (the only safe config path)
-- Direct connector tools (not PA flows)
-- CDP browser automation for Tools and Skills
-- Instructions design for NL2Query reasoning loop
-- CDX agenticruntime outage pattern (how to distinguish from real errors)
+Reference skill — NL2Query-specific. For general New Generative Orchestrator patterns (YAML, PAC CLI bugs, Dataverse API, Skills, CDP), see `/copilot-studio-new-orchestrator`. Covers:
+- Adaptive TOPN (column-aware row budget estimation, 100K chars / 500 rows)
+- DAX rules for Power BI push datasets (SUMX/FILTER, no active relationships)
+- Power BI tool descriptions (domain-aware, for reliable tool selection)
+- Schema probe pattern (TOPN(3) before any unfamiliar table)
+- Generic-first instructions design for NL2Query agents
 
 ---
 
 ### `/copilot-studio-new-orchestrator`
-**NGO agent format, settings, gotchas, /designer/ URL fix**
+**Comprehensive New Generative Orchestrator reference**
 
-Reference skill — covers: YAML schema, known UI bugs (/designer/ URL 404), PAC CLI limitations.
+Reference skill — the authoritative guide for building any agent with the New Generative Orchestrator. Covers:
+- YAML format (settings.mcs.yml, CLICopilotRecognizer, cliagent-1.0.0)
+- PAC CLI bugs and workarounds (push crash, pull collapse, wipes tools, no skills CLI, /designer/ 404)
+- Dataverse API PATCH pattern for updating agent config
+- Tools: direct connectors + Workflows (and why legacy PA flows hit HTTP 500)
+- Skills: Add-AgentSkill PowerShell function, Dataverse API POST, pac clone output format
+- CDP browser automation for adding tools and skills
+- Instructions design (generic-first, plain ASCII, domain-aware tool descriptions)
+- File delivery (container → timestamped download link; SharePoint optional)
+- LEARNINGS.md pattern for cross-session persistence
+- New Generative Orchestrator vs CGO comparison table
+- Platform gaps, CDX agenticruntime outage pattern, quick reference checklist
 
 ---
 
@@ -170,7 +179,7 @@ To use with an AI assistant that supports a skills directory, copy the desired s
 
 ---
 
-## How skills work in NGO solutions
+## How Skills work in the New Generative Orchestrator
 
 Skills are stored as `botcomponent` records (componenttype 9) in Dataverse with `kind: InlineAgentSkill`.
 
