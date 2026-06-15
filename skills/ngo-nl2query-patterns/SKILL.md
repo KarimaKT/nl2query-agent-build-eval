@@ -352,7 +352,7 @@ Instructions to use:
 When the user asks for a report or file:
 Generate it in your container using bash or python.
 Deliver it as a download link in the chat.
-For visual reports generate HTML with Chart.js charts.
+For visual reports generate HTML with Chart.js charts and click-to-filter interactivity on all data tables (clicking a row or value filters related charts and tables on the page).
 For presentations generate a PPT using python-pptx.
 Never output raw HTML or code blocks inline in chat.
 
