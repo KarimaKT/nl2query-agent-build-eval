@@ -149,6 +149,76 @@ python dataset/build_contoso_dataset.py <workspace_id> [tenant_id]
 # Outputs: dataset_id.txt
 ```
 
+
+---
+
+## Data volume handling: CGO vs NGO
+
+One of the most instructive architectural differences between CGO (TableTalk) and NGO (Fabric Analyst) is how they handle result size limits. Understanding this helps you build better agents on either architecture.
+
+### CGO approach — enforce limits in the flow
+
+TableTalk truncates results **in the Power Automate flow**, before the model ever sees the data:
+
+```
+ExecuteDatasetQuery action
+  → success scope: take first MIN(100 rows, 30,000 chars)
+  → failure scope: return error message
+```
+
+The model always receives a predictable, bounded payload. It never has to reason about data volume. The tradeoff: you lose rows silently and the agent doesn't know it's seeing a truncated view.
+
+The flow description also instructs the model to use `SUMMARIZECOLUMNS` (aggregations return far fewer rows than raw table scans), so in practice most queries never hit the cap.
+
+### NGO approach — reason about limits in the instructions
+
+NGO calls the Power BI connector directly — no flow intermediary. The model is responsible for structuring its own queries to fit within the context window. This is more powerful (no hidden truncation) but requires explicit guidance in the agent's instructions.
+
+The Fabric Analyst agent uses a **column-aware adaptive TOPN** pattern:
+
+```
+1. Schema probe: EVALUATE TOPN(3, tablename)
+   → learn column names and typical value widths
+
+2. Identify selected columns
+   → only the columns your actual query projects
+
+3. Per-column width estimate from probe samples
+   → sum widths of selected columns only (not full row width)
+   → a 3-column projection is much narrower than a 15-column table
+
+4. Calculate N
+   N = floor(target_chars / estimated_row_width), clamped to [50, 200]
+   target_chars default = 30,000 (adjustable per model context size)
+
+5. Apply: EVALUATE TOPN(N, ...)
+
+6. Truncation detection
+   → if results look incomplete, halve N or switch to aggregation
+```
+
+**Why this is better than a fixed cap:**
+- A query selecting 3 ID + numeric columns can safely return 200 rows
+- A query selecting 8 text-heavy columns should stop at 50
+- The model makes the call based on actual data shape, not a static threshold
+
+### Comparison
+
+| Concern | CGO (TableTalk) | NGO (Fabric Analyst) |
+|---|---|---|
+| Where limit is enforced | Power Automate flow (100 rows / 30K chars) | Agent reasoning loop (adaptive TOPN) |
+| Silent truncation | Yes — model doesn't know | No — model controls the limit |
+| Per-column awareness | No | Yes — estimates from selected columns only |
+| Model context adaptation | No | Yes — target_chars adjustable per model |
+| DAX strategy guidance | In flow description | In agent instructions |
+| Requires model reasoning | No | Yes — instructions must be explicit |
+| Consistency | High (enforced) | Depends on instruction quality |
+
+### What this means for builders
+
+- **CGO** is simpler and more consistent out of the box — the flow enforces safety. Good for production deployments where predictability matters more than control.
+- **NGO** gives the model full visibility into results with no hidden truncation — better for analytical depth, but only if the instructions are well-crafted. Under-specified instructions lead to unpredictable query sizes.
+- The adaptive TOPN pattern can be documented in the agent's `schema-definitions` skill so it applies consistently across all queries without cluttering the top-level instructions.
 ---
 
 ## Glossary
@@ -193,3 +263,4 @@ Apache 2.0 — see [LICENSE](LICENSE).
 ---
 
 *CGO and NGO are working terms coined by the Microsoft CAT team to describe the two Copilot Studio orchestration architectures. They are not official product names.*
+

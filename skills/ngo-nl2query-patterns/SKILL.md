@@ -304,6 +304,63 @@ Note: Do NOT list column names — discover them at runtime via TOPN.
 | `VAR _base = [Measure] RETURN DIVIDE(_base, [Total])` | Ratio/percentage calculation |
 | `EVALUATE ROW("Result", CALCULATE([Measure], 'Date'[Year]=2025))` | Single-cell time-filtered result |
 
+### Adaptive TOPN — column-aware row budget estimation
+
+**The problem:** The Power BI REST API can return up to 100K rows. Copilot Studio context windows are finite. A 15-column table with text fields can produce 400+ chars per row — 100 rows already blows the budget. A 3-column projection of the same table could safely fit 500. Hardcoding TOPN(50) is too conservative for narrow queries; omitting TOPN entirely risks truncation or context exhaustion for wide ones.
+
+**The solution:** Estimate N from the schema probe, adjusted for the *specific columns your query selects* — not all columns.
+
+```
+Step 1 — Schema probe (always run first on unfamiliar tables)
+  EVALUATE TOPN(3, tablename)
+  Observe: column names, data types, sample value widths
+
+Step 2 — Identify projected columns
+  Note which columns your actual query will SELECT or project.
+  If fetching all columns, use all. If projecting a subset, use only those.
+
+Step 3 — Per-column width estimate from probe data
+  Short IDs / codes ("SUP03", "East"):          ~8 chars
+  Numeric values ("59.4", "37099.50"):           ~10 chars
+  Names / category labels ("Beauty", "At-Risk"): ~15 chars
+  Dates ("2024-03-15"):                          ~12 chars
+  Free text / descriptions:                      ~50-100 chars
+
+Step 4 — Row width
+  estimated_row_width = sum of avg_char_width for selected columns
+  Add ~10% for separators and formatting overhead
+
+Step 5 — Calculate N
+  target_chars = 30000   (default; increase for larger model contexts)
+  N = floor(target_chars / estimated_row_width)
+  Clamp N to [50, 200]
+
+  Examples:
+    3 cols × 20 chars avg  →  row = 60   →  N = 500  → clamped to 200
+    8 cols × 40 chars avg  →  row = 320  →  N = 93
+    5 text cols × 80 chars →  row = 400  →  N = 75
+    15 cols × 25 chars avg →  row = 375  →  N = 80
+
+Step 6 — Apply
+  EVALUATE TOPN(N, SUMMARIZECOLUMNS(col1, col2, ...), sort_col, ASC)
+  or for raw row fetch:
+  EVALUATE TOPN(N, tablename, sort_col, ASC)
+```
+
+**Adjusting target_chars by model context size:**
+
+| Model | target_chars suggestion |
+|---|---|
+| Unknown / default | 30,000 |
+| Claude Opus 4.x (200K context) | 50,000–80,000 |
+| GPT-4o (128K context) | 40,000–60,000 |
+| Small / limited models | 15,000–20,000 |
+
+The deploy skill defaults to 30,000. If the user specifies a model with a known context size at deploy time, update target_chars in the instructions accordingly.
+
+**Truncation detection:** If results look incomplete — totals inconsistent, list suspiciously round, count lower than a prior `COUNTROWS` check — treat as truncated. Retry with halved N or switch to `SUMMARIZECOLUMNS` aggregation.
+
+
 ---
 
 ## 8. Skills (Knowledge Segments)
@@ -661,6 +718,63 @@ Note: Do NOT list column names — discover them at runtime via TOPN.
 | `EVALUATE SUMX(FILTER('Fact', ...), 'Fact'[Amount])` | Cross-table aggregation, push datasets |
 | `VAR _base = [Measure] RETURN DIVIDE(_base, [Total])` | Ratio/percentage calculation |
 | `EVALUATE ROW("Result", CALCULATE([Measure], 'Date'[Year]=2025))` | Single-cell time-filtered result |
+
+### Adaptive TOPN — column-aware row budget estimation
+
+**The problem:** The Power BI REST API can return up to 100K rows. Copilot Studio context windows are finite. A 15-column table with text fields can produce 400+ chars per row — 100 rows already blows the budget. A 3-column projection of the same table could safely fit 500. Hardcoding TOPN(50) is too conservative for narrow queries; omitting TOPN entirely risks truncation or context exhaustion for wide ones.
+
+**The solution:** Estimate N from the schema probe, adjusted for the *specific columns your query selects* — not all columns.
+
+```
+Step 1 — Schema probe (always run first on unfamiliar tables)
+  EVALUATE TOPN(3, tablename)
+  Observe: column names, data types, sample value widths
+
+Step 2 — Identify projected columns
+  Note which columns your actual query will SELECT or project.
+  If fetching all columns, use all. If projecting a subset, use only those.
+
+Step 3 — Per-column width estimate from probe data
+  Short IDs / codes ("SUP03", "East"):          ~8 chars
+  Numeric values ("59.4", "37099.50"):           ~10 chars
+  Names / category labels ("Beauty", "At-Risk"): ~15 chars
+  Dates ("2024-03-15"):                          ~12 chars
+  Free text / descriptions:                      ~50-100 chars
+
+Step 4 — Row width
+  estimated_row_width = sum of avg_char_width for selected columns
+  Add ~10% for separators and formatting overhead
+
+Step 5 — Calculate N
+  target_chars = 30000   (default; increase for larger model contexts)
+  N = floor(target_chars / estimated_row_width)
+  Clamp N to [50, 200]
+
+  Examples:
+    3 cols × 20 chars avg  →  row = 60   →  N = 500  → clamped to 200
+    8 cols × 40 chars avg  →  row = 320  →  N = 93
+    5 text cols × 80 chars →  row = 400  →  N = 75
+    15 cols × 25 chars avg →  row = 375  →  N = 80
+
+Step 6 — Apply
+  EVALUATE TOPN(N, SUMMARIZECOLUMNS(col1, col2, ...), sort_col, ASC)
+  or for raw row fetch:
+  EVALUATE TOPN(N, tablename, sort_col, ASC)
+```
+
+**Adjusting target_chars by model context size:**
+
+| Model | target_chars suggestion |
+|---|---|
+| Unknown / default | 30,000 |
+| Claude Opus 4.x (200K context) | 50,000–80,000 |
+| GPT-4o (128K context) | 40,000–60,000 |
+| Small / limited models | 15,000–20,000 |
+
+The deploy skill defaults to 30,000. If the user specifies a model with a known context size at deploy time, update target_chars in the instructions accordingly.
+
+**Truncation detection:** If results look incomplete — totals inconsistent, list suspiciously round, count lower than a prior `COUNTROWS` check — treat as truncated. Retry with halved N or switch to `SUMMARIZECOLUMNS` aggregation.
+
 
 ---
 
@@ -1101,4 +1215,5 @@ Write-Host "LEARNINGS.md updated."
 4. **`pac copilot push` crashes** → Switch to Dataverse API PATCH permanently (Section 4).
 5. **Skills not appearing** → Add via UI or CDP automation (Section 6). PAC CLI cannot add skills.
 6. **Wrong URL for agent** → Use `/agents/<botId>` not `/agents/designer/<botId>`.
+
 
