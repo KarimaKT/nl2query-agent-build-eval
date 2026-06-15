@@ -355,14 +355,14 @@ For tabular data use CSV.
 Never output raw HTML or code blocks inline in chat.
 ```
 
-**Optional path — OneDrive connector tool → file saved to OneDrive**
+**Optional path — SharePoint connector tool → file saved to SharePoint**
 
 If you want files saved to the user's OneDrive instead of (or in addition to) a download link:
-1. Add the **OneDrive for Business "Create file"** connector tool (Tools "+" → Connectors → OneDrive for Business)
-2. Tell the agent the target path in instructions: *"If a OneDrive tool is available, save to /Documents/Reports/<filename> and return the path."*
-3. User must authorize the OneDrive connector on first use (consent flow in the chat)
+1. Add the **SharePoint "Create file"** connector tool (Tools "+" → Connectors → OneDrive for Business)
+2. Tell the agent the target path in instructions: *"If a SharePoint tool is available, save to /sites/<YourSite>/Shared Documents/Reports/<filename> and return the path."*
+3. User must authorize the SharePoint connector on first use (consent flow in the chat)
 
-The OneDrive tool takes a `path` and `content` parameter. For text-based files (HTML, CSV, JSON, Markdown) pass the content string directly. For binary formats (true .pptx), use the container to generate the file and deliver as a download link instead — OneDrive "Create file" accepts text content, not binary.
+The SharePoint tool takes a `path` and `content` parameter. For text-based files (HTML, CSV, JSON, Markdown) pass the content string directly. For binary formats (true .pptx), use the container to generate the file and deliver as a download link instead — OneDrive "Create file" accepts text content, not binary.
 
 ### Adaptive TOPN — column-aware row budget estimation
 
@@ -816,11 +816,11 @@ NGO agents run in a container that has **bash and Python available OOB**. This m
 - Works for: HTML reports, CSV, JSON, PPTX (via python-pptx), Markdown
 - Use this path by default
 
-**Path 2 — OneDrive connector tool → saved to OneDrive**
+**Path 2 — SharePoint connector tool → saved to SharePoint**
 - Requires the "Create file" OneDrive for Business connector tool
 - Agent passes filename + content → file lands in user's OneDrive → agent returns the path
 - Good when users want persistent storage or need to share files
-- User must have authorized the OneDrive connector (consent flow on first use)
+- User must have authorized the SharePoint connector (consent flow on first use)
 
 **What the previous test showed:** The agent was finding the right writeable path in its container for Path 1, but hit a directory permissions issue mid-run. It successfully retrieved 500 rows / 111 KB — the container capability is real. Path 1 just needs the agent to know the correct writeable directory.
 
@@ -1325,6 +1325,7 @@ Write-Host "LEARNINGS.md updated."
 4. **`pac copilot push` crashes** → Switch to Dataverse API PATCH permanently (Section 4).
 5. **Skills not appearing** → Add via UI or CDP automation (Section 6). PAC CLI cannot add skills.
 6. **Wrong URL for agent** → Use `/agents/<botId>` not `/agents/designer/<botId>`.
+
 
 
 
