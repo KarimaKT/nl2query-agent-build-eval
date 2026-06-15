@@ -162,21 +162,11 @@ Every deploy/comparison run writes a `LEARNINGS.md` to the working directory wit
 
 Skills read this file at start and skip phases where IDs are already known. This makes re-runs fast and avoids re-discovering IDs.
 
-## Installing skills locally
+## Using these skills
 
-Skills in this folder are ready to use with Clawpilot. To install:
+Each skill is a markdown instruction file. Load it into your AI assistant and follow its prompts.
 
-```powershell
-# Copy to Clawpilot m-skills directory
-Get-ChildItem "C:\src\Fabric\skills" -Directory | ForEach-Object {
-    $dest = "$env:USERPROFILE\.copilot\m-skills\$($_.Name)"
-    if (-not (Test-Path $dest)) { New-Item -ItemType Directory -Path $dest -Force | Out-Null }
-    Copy-Item "$($_.FullName)\SKILL.md" "$dest\SKILL.md" -Force
-    Write-Host "Installed: $($_.Name)"
-}
-```
-
-After installing, invoke any skill by typing `/skill-name` in Clawpilot chat.
+To use with an AI assistant that supports a skills directory, copy the desired skill subfolder to wherever your tooling expects instruction files. No build step required — these are plain text.
 
 ---
 

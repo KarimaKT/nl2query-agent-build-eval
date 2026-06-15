@@ -189,10 +189,9 @@ Tools section shows PA flows by their display name (e.g. "TableTalk - Fabric - S
 
 ## Sources
 
-- Live Copilot Studio UI exploration (new UI, CDX environment) — June 2026
+- Live Copilot Studio UI exploration — June 2026
 - `pac copilot clone` output analysis for `d01d7579-bf47-4da7-b751-22a419ade844` (Fabric Analyst)
 - Dataverse API inspection of bot configuration JSON
 - ETC sample repo `microsoft/enhanced-task-completion` — NOTE: outdated as of June 2026, uses deprecated `SmartTaskCompletionEnabled` pattern
-- Dracarys dashboard `C:\Users\kkanjitajdin\OneDrive - Microsoft\Documents\Clawpilot\dracarys-dashboard\dracarys-dashboard.html` — design guidance and feature notes
-- PAC CLI 2.8.1 crash logs at `C:\Users\kkanjitajdin\.nuget\packages\microsoft.powerapps.cli\2.8.1\tools\logs\pac-log.txt`
+- PAC CLI crash logs at `~/.nuget/packages/microsoft.powerapps.cli/<version>/tools/logs/pac-log.txt`
 

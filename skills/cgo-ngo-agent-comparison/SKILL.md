@@ -376,7 +376,7 @@ Look for cross-cutting patterns:
 
 ## STEP 6 — Generate comparison report (HTML)
 
-Self-contained HTML using Clawpilot theme variables. Must include theme detection script. Sections:
+Self-contained HTML. Use a clean, readable theme with light/dark mode support. Sections:
 
 1. **Agent Profiles** — type, model, tools, knowledge, skills, inferred purpose
 2. **Test Design Summary** — how questions were generated, what sources were sampled, bucket distribution
@@ -621,7 +621,7 @@ Format: CSV question,verificationMethod,expectedOutcome
 
 ```
 <outputDir>/
-  comparison-report.html          ← interactive report (Clawpilot-themed)
+  comparison-report.html          ← interactive report (clean, readable, light/dark mode)
   agent1-profile.md               ← discovered config + data sampling results
   agent2-profile.md
   generated-questions.md          ← all questions with expected answers, grader stacks, bucket
@@ -726,6 +726,7 @@ function Send-CDP($tabId, $method, $params = "{}") {
 
 Response stability: poll `document.body.innerText` every 10s; complete when length is stable for 2 consecutive polls.
 Tool call detection (NGO): extract tool call labels that appear as plain-text prefixes before the narrative in the response.
+
 
 
 
