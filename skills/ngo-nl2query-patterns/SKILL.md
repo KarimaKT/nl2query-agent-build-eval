@@ -352,7 +352,7 @@ Instructions to use:
 When the user asks for a report or file:
 Generate it in your container using bash or python.
 Deliver it as a download link in the chat.
-For visual reports generate HTML with Chart.js charts and click-to-filter interactivity on all data tables (clicking a row or value filters related charts and tables on the page).
+For visual reports generate HTML with Chart.js charts and click-to-filter interactivity on all data tables (clicking a row or value filters related charts and tables on the page). Every report delivery uses a new timestamped filename. When updating an existing report, carry over prior content, apply the change, and re-deliver as a new file — the user always needs a fresh download link.
 For presentations generate a PPT using python-pptx.
 Never output raw HTML or code blocks inline in chat.
 
@@ -494,3 +494,4 @@ $components = (Invoke-RestMethod `
 $existingSkills = $components | Where-Object { ---
 name: "ngo-nl2query-patterns"
 description: "Design patterns, YAML syntax, hard-won learnings, and evaluation methodology for NGO (CLICopilotRecognizer, cliagent-1.0.0) NL2Query agents. Covers YAML format, PAC CLI bugs, Dataverse API workarounds, direct connector tools, refresh strategy, file delivery, skills format, CDP-based testing, and CGO vs NGO comparison."
+
