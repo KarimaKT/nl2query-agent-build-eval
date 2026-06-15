@@ -31,7 +31,7 @@ NGO (New Generative Orchestration) is the next-generation agent architecture in 
 | Recognizer | `GenerativeAIRecognizer` | `CLICopilotRecognizer` |
 | Configuration | Topics + flows + settings.mcs.yml | settings.mcs.yml only (Tools + Skills) |
 | Reasoning | Hidden | Visible as intermediate steps in chat |
-| Tool failures | PA flows common | Direct connectors preferred |
+| Tool types | PA flows (InvokeFlowTaskAction) | Direct connectors + Workflows (new) |
 
 ---
 
@@ -155,9 +155,14 @@ Write-Host "Config patched successfully."
 
 ---
 
-## 5. Direct Connector Tools (Not PA Flows)
+## 5. Tools: Direct Connectors and Workflows
 
-PA flows as tools hit **HTTP 500** in managed tenants and CDX environments. Use direct connector actions instead.
+NGO supports two tool types:
+
+- **Direct connector actions** — call a connector operation directly (e.g. Power BI `ExecuteDatasetQuery`). Simpler, no PA license needed.
+- **Workflows** — the new PA flow experience native to NGO agents. More flexible than CGO's InvokeFlowTaskAction; supports complex logic, multi-step orchestration, and external integrations.
+
+**Note on legacy PA flows as tools:** Classic PA flows wired as tools via `InvokeFlowTaskAction` hit HTTP 500 in some managed environments. Prefer direct connector actions or Workflows instead.
 
 ### Adding tools via Copilot Studio UI
 Navigate to: `Agents → <agent> → Tools → "+" → Connectors`
