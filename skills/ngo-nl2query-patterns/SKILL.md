@@ -289,9 +289,6 @@ Note: Do NOT list column names — discover them at runtime via TOPN.
 - Lead with the direct answer.
 - Follow with supporting metrics.
 - End with 3 suggested follow-up questions.
-- For multi-metric analyses: offer file delivery.
-  Option A: Save interactive HTML report to OneDrive.
-  Option B: Save PPTX outline to OneDrive.
 ```
 
 
@@ -764,9 +761,6 @@ Note: Do NOT list column names — discover them at runtime via TOPN.
 - Lead with the direct answer.
 - Follow with supporting metrics.
 - End with 3 suggested follow-up questions.
-- For multi-metric analyses: offer file delivery.
-  Option A: Save interactive HTML report to OneDrive.
-  Option B: Save PPTX outline to OneDrive.
 ```
 
 
@@ -1325,6 +1319,7 @@ Write-Host "LEARNINGS.md updated."
 4. **`pac copilot push` crashes** → Switch to Dataverse API PATCH permanently (Section 4).
 5. **Skills not appearing** → Add via UI or CDP automation (Section 6). PAC CLI cannot add skills.
 6. **Wrong URL for agent** → Use `/agents/<botId>` not `/agents/designer/<botId>`.
+
 
 
 
