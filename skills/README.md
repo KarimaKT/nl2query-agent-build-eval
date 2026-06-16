@@ -212,3 +212,4 @@ Skills are stored as `botcomponent` records (componenttype 9) in Dataverse with 
 **Why this split:** Instructions apply on every turn (token overhead). Skills are retrieved selectively. Putting column-level detail and DAX patterns in skills keeps instructions short and focused.
 
 
+

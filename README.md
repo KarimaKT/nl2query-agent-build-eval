@@ -2,7 +2,7 @@
 
 **Auto-deploy, compare, and learn from NL2Query agents on Power BI / Fabric — built with Copilot Studio.**
 
-This repo contains skills, patterns, and tooling developed by the [Microsoft CAT team](https://aka.ms/cat) for building production-quality natural language to query (NL2Query) agents on Power BI and Microsoft Fabric using Copilot Studio.
+This repo contains skills, patterns, and tooling developed by the Microsoft for building production-quality natural language to query (NL2Query) agents on Power BI and Microsoft Fabric using Copilot Studio.
 
 It extends [Nico Sprotti's TableTalk with Fabric](https://github.com/NicoPilot-dev/TableTalkWithFabric) — the reference NL2Query agent for Copilot Studio — with automated deployment, an NGO architecture variant, side-by-side evaluation, and generalizable patterns for large data agents.
 
@@ -264,7 +264,7 @@ See `/ngo-nl2query-patterns` for the full list. Key ones:
 ## Credits
 
 - **[TableTalk with Fabric](https://github.com/NicoPilot-dev/TableTalkWithFabric)** — Nico Sprotti ([GitHub](https://github.com/NicoPilot-dev)) — the reference CGO NL2Query agent that this project builds on and compares against
-- **[Microsoft CAT team](https://aka.ms/cat)** — Fabric Analyst (NGO), ContosoRetail dataset, comparison framework, skills library
+- **Microsoft** — Fabric Analyst (NGO), ContosoRetail dataset, comparison framework, skills library
 
 ---
 
@@ -274,6 +274,7 @@ Apache 2.0 — see [LICENSE](LICENSE).
 
 ---
 
-*CGO and NGO are working terms coined by the Microsoft CAT team to describe the two Copilot Studio orchestration architectures. They are not official product names.*
+*CGO and NGO are working terms used in this repo to describe the two Copilot Studio orchestration architectures. They are not official product names.*
+
 
 
